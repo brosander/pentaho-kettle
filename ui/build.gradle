@@ -1,0 +1,6 @@
+dependencies {
+  compile project(':core')
+  compile project(':engine')
+  compile project(':dbdialog')
+}
+

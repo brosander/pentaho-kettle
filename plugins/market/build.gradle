@@ -1,0 +1,12 @@
+project.ext['assemble'] = [
+  [ 'to' : 'market', 'fromType' : 'outputJar' ],
+  [ 'to' : 'market', 'from' : 'res', 'fromType' : 'folder', 'filterSpecs': [
+    [ 'pattern' : '.*version\\.xml', 'operation' : 'replace', 'find': '@TRUNK@', 'replacement' : '${project.revision}' ] ] ]
+]
+
+dependencies {
+  compile project(':core')
+  compile project(':engine')
+  compile project(':ui')
+}
+

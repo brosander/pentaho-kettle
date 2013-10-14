@@ -1,0 +1,29 @@
+project.ext['assemble'] = [ 
+  [ 'from' : 'launcher',    'to' : 'launcher' ],
+  [ 'from' : 'package-res', 'to' : '',        'fromType' : 'folder', 
+    'filterSpecs': [ 
+      [ 'pattern' : '.*\\.sh|.*\\.bat|.*\\.plist', 'operation' : 'replace', 'find' : 'launcher\\.jar',          'replacement' : 'pentaho-application-launcher-${project.revision}.jar' ],
+      [ 'pattern' : '.*\\.sh|.*\\.bat',            'operation' : 'replace', 'find' : '@KETTLE_VERSION_STRING@', 'replacement' : '${project.revision}' ],
+      [ 'pattern' : '.*\\.sh',                     'operation' : 'chmod',    'permissions' : '755' ] ] ],
+  [ 'from' : 'plugins',     'to' : 'plugins', 'fromType' : 'configurationZip' ],
+  [ 'from' : 'runtime',     'to' : 'lib', 
+    'filterSpecs': [
+      [ 'pattern' : '.*activation-.*\\.jar', 'operation' : 'exclude' ],
+      [ 'pattern' : '.*swt-linux-.*\\.jar',  'operation' : 'exclude' ] ] ], 
+  [ 'from' : 'swtlibs',     'to' : '',        'fromType' : 'configurationZip' ],
+  [ 'fromType' : 'srcZip',  'to' : '']
+]
+
+dependencies {
+  compile project(':core')
+  compile project(':engine')
+  compile project(':dbdialog')
+  compile project(':jdbc')
+  compile project(':ui')
+  plugins project(path: ':plugins:kettle-gpload-plugin', configuration: 'zip')
+  plugins project(path: ':plugins:kettle-hl7-plugin',    configuration: 'zip')
+  plugins project(path: ':plugins:kettle-openerp-plugin',configuration: 'zip')
+  plugins project(path: ':plugins:kettle-palo-plugin',   configuration: 'zip')
+  plugins project(path: ':plugins:kettle5-log4j-plugin', configuration: 'zip')
+  plugins project(path: ':plugins:market',               configuration: 'zip')
+}

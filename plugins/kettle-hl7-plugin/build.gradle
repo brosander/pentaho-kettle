@@ -1,0 +1,10 @@
+project.ext['assemble'] = [
+  [ 'to' : 'kettle-hl7-plugin', 'fromType' : 'outputJar' ]
+]
+  
+dependencies {
+  compile project(':core')
+  compile project(':engine')
+  compile project(':ui')
+}
+

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
-  <info organisation="${ivy.artifact.group}" module="${ivy.artifact.id}" revision="${project.revision}" />
+  <info organisation="${ivy.artifact.group}" module="${ivy.artifact.id}" revision="${dependency.kettle.revision}" />
   <configurations>
         <conf name="default" extends="runtime,default-ext"/>
         <conf name="default-ext"/>
@@ -101,7 +101,7 @@
     <dependency org="org.hibernate"                    name="hibernate-commons-annotations" rev="3.2.0.Final" transitive="false" />
     <dependency org="org.hibernate"                    name="hibernate-ehcache"    rev="3.6.9.Final"     transitive="false" />
     <dependency org="cglib"                            name="cglib-nodep"          rev="2.2"             transitive="false"/>
-    <dependency org="org.owasp.esapi"                  name="esapi"                rev="2.0.1"           transitive="false"/>
+    <dependency org="org.owasp.esapi"                  name="esapi"                rev="2.0.1"           />
     <dependency org="net.sourceforge.nekohtml"         name="nekohtml"             rev="1.9.15"          transitive="false"/>
     <dependency org="rhino"                            name="js"                   rev="1.7R3"           transitive="false"/>
     <dependency org="javax.mail"                       name="mail"                 rev="1.4.7"           transitive="false" />
@@ -115,6 +115,7 @@
     <dependency org="oro"                 name="oro"           rev="2.0.8"   conf="test->default" transitive="false"/>
     <dependency org="jaxen"               name="jaxen"         rev="1.1.1"     conf="test->default" transitive="false"/>
     <dependency org="junit"               name="junit"         rev="4.7"     conf="test->default" transitive="false"/>
+    <dependency org="org.mockito"         name="mockito-all"         rev="1.8.4"            transitive="false" conf="test->default"/>
     
     <!-- excludes -->
     <exclude org="pentaho-kettle" module="kettle-db"/>

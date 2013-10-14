@@ -1,0 +1,12 @@
+project.ext['assemble'] = [
+  [ 'to' : 'kettle5-log4j-plugin', 'fromType' : 'outputJar' ],
+  [ 'to' : 'kettle5-log4j-plugin', 'from' : 'res', 'fromType' : 'folder', 'filterSpecs': [
+    [ 'pattern' : '.*version\\.xml', 'operation' : 'replace', 'find': '@TRUNK@', 'replacement' : '${project.revision}' ] ] ]
+]
+
+dependencies {
+  compile project(':core')
+  compile project(':engine')
+  compile project(':ui')
+}
+

@@ -1,0 +1,7 @@
+test {
+  ignoreFailures = true
+}
+
+dependencies {
+  compile project(':core')
+}
