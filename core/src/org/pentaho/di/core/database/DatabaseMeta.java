@@ -90,6 +90,8 @@ public class DatabaseMeta extends SharedObjectBase implements Cloneable, XMLInte
   };
 
   private DatabaseInterface databaseInterface;
+  
+  private static final Object allDatabaseInterfacesSyncObject = new Object();
 
   private static Map<String, DatabaseInterface> allDatabaseInterfaces;
 
@@ -1307,44 +1309,48 @@ public class DatabaseMeta extends SharedObjectBase implements Cloneable, XMLInte
    * next call to getDatabaseInterfacesMap() will reload the map.
    */
   public static final void clearDatabaseInterfacesMap() {
-    allDatabaseInterfaces = null;
+    synchronized ( allDatabaseInterfacesSyncObject ) {
+      allDatabaseInterfaces = null;
+    }
   }
 
   public static final Map<String, DatabaseInterface> getDatabaseInterfacesMap() {
-    if ( allDatabaseInterfaces != null ) {
+    synchronized ( allDatabaseInterfacesSyncObject ) {
+      if ( allDatabaseInterfaces != null ) {
+        return allDatabaseInterfaces;
+      }
+
+      LogChannelInterface log = LogChannel.GENERAL;
+
+      // If multiple threads call this method at the same time, there may be extra work done until
+      // the allDatabaseInterfaces is finally set. Before we were not using a local map to populate,
+      // and parallel threads were getting an incomplete list, causing null pointers.
+
+      PluginRegistry registry = PluginRegistry.getInstance();
+
+      List<PluginInterface> plugins = registry.getPlugins( DatabasePluginType.class );
+      HashMap<String, DatabaseInterface> tmpAllDatabaseInterfaces = new HashMap<String, DatabaseInterface>();
+      for ( PluginInterface plugin : plugins ) {
+        try {
+          DatabaseInterface databaseInterface = (DatabaseInterface) registry.loadClass( plugin );
+          databaseInterface.setPluginId( plugin.getIds()[0] );
+          databaseInterface.setPluginName( plugin.getName() );
+          tmpAllDatabaseInterfaces.put( plugin.getIds()[0], databaseInterface );
+        } catch ( KettlePluginException cnfe ) {
+          System.out.println( "Could not create connection entry for " + plugin.getName() + ".  "
+              + cnfe.getCause().getClass().getName() );
+          log.logError( "Could not create connection entry for " + plugin.getName() + ".  "
+              + cnfe.getCause().getClass().getName() );
+          if ( log.isDebug() ) {
+            log.logDebug( "Debug-Error loading plugin: " + plugin, cnfe );
+          }
+        } catch ( Exception e ) {
+          log.logError( "Error loading plugin: " + plugin, e );
+        }
+      }
+      allDatabaseInterfaces = Collections.unmodifiableMap( tmpAllDatabaseInterfaces );
       return allDatabaseInterfaces;
     }
-
-    LogChannelInterface log = LogChannel.GENERAL;
-
-    // If multiple threads call this method at the same time, there may be extra work done until
-    // the allDatabaseInterfaces is finally set. Before we were not using a local map to populate,
-    // and parallel threads were getting an incomplete list, causing null pointers.
-
-    PluginRegistry registry = PluginRegistry.getInstance();
-
-    List<PluginInterface> plugins = registry.getPlugins( DatabasePluginType.class );
-    HashMap<String, DatabaseInterface> tmpAllDatabaseInterfaces = new HashMap<String, DatabaseInterface>();
-    for ( PluginInterface plugin : plugins ) {
-      try {
-        DatabaseInterface databaseInterface = (DatabaseInterface) registry.loadClass( plugin );
-        databaseInterface.setPluginId( plugin.getIds()[0] );
-        databaseInterface.setPluginName( plugin.getName() );
-        tmpAllDatabaseInterfaces.put( plugin.getIds()[0], databaseInterface );
-      } catch ( KettlePluginException cnfe ) {
-        System.out.println( "Could not create connection entry for " + plugin.getName() + ".  "
-            + cnfe.getCause().getClass().getName() );
-        log.logError( "Could not create connection entry for " + plugin.getName() + ".  "
-            + cnfe.getCause().getClass().getName() );
-        if ( log.isDebug() ) {
-          log.logDebug( "Debug-Error loading plugin: " + plugin, cnfe );
-        }
-      } catch ( Exception e ) {
-        log.logError( "Error loading plugin: " + plugin, e );
-      }
-    }
-    allDatabaseInterfaces = tmpAllDatabaseInterfaces;
-    return allDatabaseInterfaces;
   }
 
   public static final int[] getAccessTypeList( String dbTypeDesc ) {
