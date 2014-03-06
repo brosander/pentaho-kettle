@@ -22,13 +22,37 @@
 
 package org.pentaho.di.core.auth;
 
-import org.pentaho.di.core.auth.core.AuthenticationProvider;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * The AuthenticationProvider interface specifies the operations needed to interact with an authentication method.
+ * This annotation signals to the plugin system that the class is an authentication provider plugin.
+ * 
  */
-public interface AuthenticationProviderType {
-  public String getDisplayName();
-  
-  public Class<? extends AuthenticationProvider> getProviderClass();
+@Documented
+@Retention( RetentionPolicy.RUNTIME )
+@Target( ElementType.TYPE )
+public @interface AuthenticationConsumerPlugin {
+
+  String id();
+
+  String name();
+
+  String description() default "Authentication Plugin";
+
+  /**
+   * @return True if a separate class loader is needed every time this class is instantiated
+   */
+  boolean isSeparateClassLoaderNeeded() default false;
+
+  String i18nPackageName() default "";
+
+  String documentationUrl() default "";
+
+  String casesUrl() default "";
+
+  String forumUrl() default "";
 }

@@ -24,7 +24,6 @@ package org.pentaho.di.core.auth;
 
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -44,19 +43,16 @@ import org.w3c.dom.Node;
  * 
  */
 @PluginMainClassType( AuthenticationProviderType.class )
-@PluginAnnotationType( AuthenticationPlugin.class )
-public class AuthenticationPluginType extends BasePluginType implements PluginTypeInterface {
-  protected static AuthenticationPluginType pluginType;
+@PluginAnnotationType( AuthenticationProviderPlugin.class )
+public class AuthenticationProviderPluginType extends BasePluginType implements PluginTypeInterface {
+  protected static AuthenticationProviderPluginType pluginType = new AuthenticationProviderPluginType();;
 
-  private AuthenticationPluginType() {
-    super( AuthenticationPlugin.class, "AUTHENTICATION", "Authentication" );
+  private AuthenticationProviderPluginType() {
+    super( AuthenticationProviderPlugin.class, "AUTHENTICATION", "Authentication" );
     populateFolders( "authentication" );
   }
 
-  public static AuthenticationPluginType getInstance() {
-    if ( pluginType == null ) {
-      pluginType = new AuthenticationPluginType();
-    }
+  public static AuthenticationProviderPluginType getInstance() {
     return pluginType;
   }
 
@@ -67,7 +63,7 @@ public class AuthenticationPluginType extends BasePluginType implements PluginTy
   protected void registerNatives() throws KettlePluginException {
     // Scan the native database types...
     //
-    String xmlFile = Const.XML_FILE_KETTLE_COMPRESSION_PROVIDERS;
+    String xmlFile = Const.XML_FILE_KETTLE_AUTHENTICATION_PROVIDERS;
 
     // Load the plugins for this file...
     //
@@ -77,7 +73,7 @@ public class AuthenticationPluginType extends BasePluginType implements PluginTy
         inputStream = getClass().getResourceAsStream( "/" + xmlFile );
       }
       if ( inputStream == null ) {
-        throw new KettlePluginException( "Unable to find native kettle compression providers definition file: "
+        throw new KettlePluginException( "Unable to find native kettle authentication providers definition file: "
             + xmlFile );
       }
       Document document = XMLHandler.loadXMLFile( inputStream, null, true, false );
@@ -88,19 +84,12 @@ public class AuthenticationPluginType extends BasePluginType implements PluginTy
         registerPluginFromXmlResource( repNode, "./", this.getClass(), true, null );
       }
     } catch ( KettleXMLException e ) {
-      throw new KettlePluginException( "Unable to read the kettle compression providers config file: " + xmlFile, e );
+      throw new KettlePluginException( "Unable to read the kettle authentication providers config file: " + xmlFile, e );
     }
   }
 
   @Override
   protected void registerXmlPlugins() throws KettlePluginException {
-  }
-
-  @Override
-  public void handlePluginAnnotation( Class<?> clazz, Annotation annotation, List<String> libraries,
-      boolean nativePluginType, URL pluginFolder ) throws KettlePluginException {
-
-    super.handlePluginAnnotation( clazz, annotation, libraries, nativePluginType, pluginFolder );
   }
 
   public String[] getNaturalCategoriesOrder() {
@@ -114,27 +103,27 @@ public class AuthenticationPluginType extends BasePluginType implements PluginTy
 
   @Override
   protected String extractDesc( Annotation annotation ) {
-    return ( (AuthenticationPlugin) annotation ).description();
+    return ( (AuthenticationProviderPlugin) annotation ).description();
   }
 
   @Override
   protected String extractID( Annotation annotation ) {
-    return ( (AuthenticationPlugin) annotation ).id();
+    return ( (AuthenticationProviderPlugin) annotation ).id();
   }
 
   @Override
   protected String extractName( Annotation annotation ) {
-    return ( (AuthenticationPlugin) annotation ).name();
+    return ( (AuthenticationProviderPlugin) annotation ).name();
   }
 
   @Override
   protected boolean extractSeparateClassLoader( Annotation annotation ) {
-    return ( (AuthenticationPlugin) annotation ).isSeparateClassLoaderNeeded();
+    return ( (AuthenticationProviderPlugin) annotation ).isSeparateClassLoaderNeeded();
   }
 
   @Override
   protected String extractI18nPackageName( Annotation annotation ) {
-    return ( (AuthenticationPlugin) annotation ).i18nPackageName();
+    return ( (AuthenticationProviderPlugin) annotation ).i18nPackageName();
   }
 
   @Override
@@ -143,17 +132,17 @@ public class AuthenticationPluginType extends BasePluginType implements PluginTy
 
   @Override
   protected String extractDocumentationUrl( Annotation annotation ) {
-    return ( (AuthenticationPlugin) annotation ).documentationUrl();
+    return ( (AuthenticationProviderPlugin) annotation ).documentationUrl();
   }
 
   @Override
   protected String extractCasesUrl( Annotation annotation ) {
-    return ( (AuthenticationPlugin) annotation ).casesUrl();
+    return ( (AuthenticationProviderPlugin) annotation ).casesUrl();
   }
 
   @Override
   protected String extractForumUrl( Annotation annotation ) {
-    return ( (AuthenticationPlugin) annotation ).forumUrl();
+    return ( (AuthenticationProviderPlugin) annotation ).forumUrl();
   }
 
   @Override

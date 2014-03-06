@@ -861,6 +861,11 @@ public class Const {
    * The XML file that contains the list of native Kettle compression providers (None, ZIP, GZip, etc.)
    */
   public static final String XML_FILE_KETTLE_COMPRESSION_PROVIDERS = "kettle-compression-providers.xml";
+  
+  /**
+   * The XML file that contains the list of native Kettle compression providers (None, ZIP, GZip, etc.)
+   */
+  public static final String XML_FILE_KETTLE_AUTHENTICATION_PROVIDERS = "kettle-authentication-providers.xml";
 
   /**
    * The XML file that contains the list of native extension points (None by default, this is mostly for OEM purposes)
