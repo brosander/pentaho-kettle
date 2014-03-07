@@ -5,6 +5,7 @@ import java.lang.reflect.Proxy;
 import org.pentaho.di.core.auth.core.AuthenticationConsumer;
 import org.pentaho.di.core.auth.core.AuthenticationConsumerFactory;
 import org.pentaho.di.core.auth.core.AuthenticationConsumerInvocationHandler;
+import org.pentaho.di.core.auth.core.AuthenticationConsumptionException;
 import org.pentaho.di.core.auth.core.AuthenticationPerformer;
 import org.pentaho.di.core.auth.core.AuthenticationProvider;
 
@@ -21,7 +22,7 @@ public class ClassloaderBridgingAuthenticationPerformer<ReturnType, CreateArgTyp
 
   @SuppressWarnings( "unchecked" )
   @Override
-  public ReturnType perform( CreateArgType consumerCreateArg ) {
+  public ReturnType perform( CreateArgType consumerCreateArg ) throws AuthenticationConsumptionException {
     AuthenticationConsumer<ReturnType, ConsumedType> consumer =
         authenticationConsumerFactory.create( consumerCreateArg );
     ConsumedType providerProxy =

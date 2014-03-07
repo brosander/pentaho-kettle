@@ -31,9 +31,10 @@ public class AuthenticationManager {
 
   public <ReturnType, CreateArgType, ConsumedType> void registerConsumerFactory(
       AuthenticationConsumerFactory<ReturnType, CreateArgType, ConsumedType> factory ) {
-    if ( !factory.getConsumedType().isInterface() ) {
+    if ( !factory.getConsumedType().isInterface()
+        && !AuthenticationProvider.class.isAssignableFrom( factory.getConsumedType() ) ) {
       throw new RuntimeException( "Cannot register consumer factory: " + factory
-          + " because its consumed type () is not an interface." );
+          + " because its consumed type () is not an interface and not an authentication provider." );
     }
 
     Map<Class<?>, AuthenticationConsumerFactory<?, ?, ?>> createTypeMap =
@@ -96,6 +97,18 @@ public class AuthenticationManager {
     } );
 
     return result;
+  }
+  
+  public <ReturnType, CreateArgType, ConsumedType> AuthenticationPerformer<ReturnType, CreateArgType>
+  getAuthenticationPerformer( Class<ReturnType> returnType, Class<CreateArgType> createArgType, String providerId ) {
+    List<AuthenticationPerformer<ReturnType, CreateArgType>> performers =
+        getSupportedAuthenticationPerformers( returnType, createArgType );
+    for ( AuthenticationPerformer<ReturnType, CreateArgType> candidatePerformer : performers ) {
+      if ( candidatePerformer.getAuthenticationProvider().getId().equals( providerId ) ) {
+        return candidatePerformer;
+      }
+    }
+    return null;
   }
 
   private <ReturnType, CreateArgType> Map<Class<?>, AuthenticationConsumerFactory<?, ?, ?>>

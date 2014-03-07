@@ -2,6 +2,7 @@ package org.pentaho.di.core.auth.core.impl;
 
 import org.pentaho.di.core.auth.core.AuthenticationConsumer;
 import org.pentaho.di.core.auth.core.AuthenticationConsumerFactory;
+import org.pentaho.di.core.auth.core.AuthenticationConsumptionException;
 import org.pentaho.di.core.auth.core.AuthenticationPerformer;
 import org.pentaho.di.core.auth.core.AuthenticationProvider;
 
@@ -17,9 +18,8 @@ public class DefaultAuthenticationPerformer<ReturnType, CreateArgType, T extends
   }
 
   @Override
-  public ReturnType perform( CreateArgType consumerCreateArg ) {
-    AuthenticationConsumer<ReturnType, T> consumer =
-        authenticationConsumerFactory.create( consumerCreateArg );
+  public ReturnType perform( CreateArgType consumerCreateArg ) throws AuthenticationConsumptionException {
+    AuthenticationConsumer<ReturnType, T> consumer = authenticationConsumerFactory.create( consumerCreateArg );
     return consumer.consume( provider );
   }
 
