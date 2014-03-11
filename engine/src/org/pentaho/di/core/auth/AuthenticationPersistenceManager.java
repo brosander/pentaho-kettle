@@ -16,12 +16,12 @@ public class AuthenticationPersistenceManager {
     usernamePasswordAuthenticationProvider.setPassword( "password" );
     manager.registerAuthenticationProvider( usernamePasswordAuthenticationProvider );
     KerberosAuthenticationProvider kerberosAuthenticationProvider =
-        new KerberosAuthenticationProvider( "bryan@TEST.COM", false, null, false, null );
+        new KerberosAuthenticationProvider( "test", "bryan@DEV.PENTAHO", false, "password", false, null );
     manager.registerAuthenticationProvider( kerberosAuthenticationProvider );
     return manager;
   }
 
-  public void persistAuthenticationProvider( AuthenticationProvider authenticationProvider ) {
+  public static void persistAuthenticationProvider( AuthenticationProvider authenticationProvider ) {
     // TODO
   }
 }

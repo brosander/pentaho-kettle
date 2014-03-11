@@ -8,10 +8,12 @@ public class KerberosAuthenticationProvider implements AuthenticationProvider {
   private String password;
   private boolean useKeytab;
   private String keytabLocation;
+  private String id;
 
-  public KerberosAuthenticationProvider( String principal, boolean useExternalCredentials, String password,
+  public KerberosAuthenticationProvider( String id, String principal, boolean useExternalCredentials, String password,
       boolean useKeytab, String keytabLocation ) {
     super();
+    this.id = id;
     this.principal = principal;
     this.useExternalCredentials = useExternalCredentials;
     this.password = password;
@@ -66,18 +68,6 @@ public class KerberosAuthenticationProvider implements AuthenticationProvider {
 
   @Override
   public String getId() {
-    return principal + hashCode();
-  }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ( ( keytabLocation == null ) ? 0 : keytabLocation.hashCode() );
-    result = prime * result + ( ( password == null ) ? 0 : password.hashCode() );
-    result = prime * result + ( ( principal == null ) ? 0 : principal.hashCode() );
-    result = prime * result + ( useExternalCredentials ? 1231 : 1237 );
-    result = prime * result + ( useKeytab ? 1231 : 1237 );
-    return result;
+    return id;
   }
 }

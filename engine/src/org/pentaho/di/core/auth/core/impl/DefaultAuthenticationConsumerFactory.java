@@ -27,11 +27,17 @@ public class DefaultAuthenticationConsumerFactory implements AuthenticationConsu
     }
 
     Method consumeMethod = null;
+    Class<?> consumedType = Object.class;
     for ( Method method : consumerClass.getMethods() ) {
-      if ( "consume".equals( method.getName() ) && method.getParameterTypes().length == 1 ) {
-        consumeMethod = method;
+      if ( "consume".equals( method.getName() ) ) {
+        Class<?>[] methodParameterTypes = method.getParameterTypes();
+        if ( methodParameterTypes.length == 1 && consumedType.isAssignableFrom( methodParameterTypes[0] ) ) {
+          consumeMethod = method;
+          consumedType = methodParameterTypes[0];
+        }
       }
     }
+    
     if ( consumeMethod == null ) {
       throw new RuntimeException( "Unable to find consume() method that takes 1 parameter." );
     }

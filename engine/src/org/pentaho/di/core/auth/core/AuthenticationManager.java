@@ -68,13 +68,14 @@ public class AuthenticationManager {
     for ( Entry<Class<?>, AuthenticationConsumerFactory<?, ?, ?>> entry : createTypeMap.entrySet() ) {
       for ( AuthenticationProvider provider : authenticationProviders ) {
         AuthenticationPerformer<ReturnType, CreateArgType> authenticationPerformer = null;
-        if ( entry.getClass().isInstance( provider ) ) {
+        if ( entry.getKey().isInstance( provider ) ) {
           @SuppressWarnings( "unchecked" )
           AuthenticationConsumerFactory<ReturnType, CreateArgType, AuthenticationProvider> factory =
               (AuthenticationConsumerFactory<ReturnType, CreateArgType, AuthenticationProvider>) entry.getValue();
           authenticationPerformer =
               new DefaultAuthenticationPerformer<ReturnType, CreateArgType, AuthenticationProvider>( provider, factory );
-        } else if ( AuthenticationConsumerInvocationHandler.isCompatible( entry.getClass(), provider ) ) {
+        } else if ( entry.getKey().getClassLoader() != provider.getClass().getClassLoader()
+            && AuthenticationConsumerInvocationHandler.isCompatible( entry.getKey(), provider ) ) {
           @SuppressWarnings( "unchecked" )
           AuthenticationConsumerFactory<ReturnType, CreateArgType, ConsumedType> factory =
               (AuthenticationConsumerFactory<ReturnType, CreateArgType, ConsumedType>) entry.getValue();
