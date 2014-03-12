@@ -37,7 +37,7 @@ public class DefaultAuthenticationConsumerFactory implements AuthenticationConsu
         }
       }
     }
-    
+
     if ( consumeMethod == null ) {
       throw new RuntimeException( "Unable to find consume() method that takes 1 parameter." );
     }

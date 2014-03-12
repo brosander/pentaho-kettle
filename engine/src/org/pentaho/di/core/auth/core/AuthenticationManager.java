@@ -50,7 +50,7 @@ public class AuthenticationManager {
   }
 
   public <ReturnType, CreateArgType, ConsumedType> List<AuthenticationPerformer<ReturnType, CreateArgType>>
-    getSupportedAuthenticationPerformers( Class<ReturnType> returnType, Class<CreateArgType> createArgType ) {
+  getSupportedAuthenticationPerformers( Class<ReturnType> returnType, Class<CreateArgType> createArgType ) {
     Map<Class<?>, AuthenticationConsumerFactory<?, ?, ?>> createTypeMap =
         getRelevantConsumerFactoryMap( returnType, createArgType );
     synchronized ( createTypeMap ) {
@@ -73,7 +73,8 @@ public class AuthenticationManager {
           AuthenticationConsumerFactory<ReturnType, CreateArgType, AuthenticationProvider> factory =
               (AuthenticationConsumerFactory<ReturnType, CreateArgType, AuthenticationProvider>) entry.getValue();
           authenticationPerformer =
-              new DefaultAuthenticationPerformer<ReturnType, CreateArgType, AuthenticationProvider>( provider, factory );
+              new DefaultAuthenticationPerformer<ReturnType, CreateArgType, AuthenticationProvider>(
+                  provider, factory );
         } else if ( entry.getKey().getClassLoader() != provider.getClass().getClassLoader()
             && AuthenticationConsumerInvocationHandler.isCompatible( entry.getKey(), provider ) ) {
           @SuppressWarnings( "unchecked" )
@@ -99,7 +100,7 @@ public class AuthenticationManager {
 
     return result;
   }
-  
+
   public <ReturnType, CreateArgType, ConsumedType> AuthenticationPerformer<ReturnType, CreateArgType>
   getAuthenticationPerformer( Class<ReturnType> returnType, Class<CreateArgType> createArgType, String providerId ) {
     List<AuthenticationPerformer<ReturnType, CreateArgType>> performers =
@@ -113,7 +114,7 @@ public class AuthenticationManager {
   }
 
   private <ReturnType, CreateArgType> Map<Class<?>, AuthenticationConsumerFactory<?, ?, ?>>
-    getRelevantConsumerFactoryMap( Class<ReturnType> returnType, Class<CreateArgType> createArgType ) {
+  getRelevantConsumerFactoryMap( Class<ReturnType> returnType, Class<CreateArgType> createArgType ) {
     synchronized ( factoryMap ) {
       Map<Class<?>, Map<Class<?>, AuthenticationConsumerFactory<?, ?, ?>>> returnTypeMap = factoryMap.get( returnType );
       if ( returnTypeMap == null ) {

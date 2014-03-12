@@ -29,6 +29,6 @@ import org.pentaho.di.core.auth.core.AuthenticationProvider;
  */
 public interface AuthenticationProviderType {
   public String getDisplayName();
-  
+
   public Class<? extends AuthenticationProvider> getProviderClass();
 }

@@ -84,7 +84,8 @@ public class AuthenticationProviderPluginType extends BasePluginType implements 
         registerPluginFromXmlResource( repNode, "./", this.getClass(), true, null );
       }
     } catch ( KettleXMLException e ) {
-      throw new KettlePluginException( "Unable to read the kettle authentication providers config file: " + xmlFile, e );
+      throw new KettlePluginException( "Unable to read the kettle authentication providers config file: "
+        + xmlFile, e );
     }
   }
 

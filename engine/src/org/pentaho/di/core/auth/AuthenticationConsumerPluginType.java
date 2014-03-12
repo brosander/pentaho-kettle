@@ -109,12 +109,12 @@ public class AuthenticationConsumerPluginType extends BasePluginType implements 
 
   @Override
   protected void registerNatives() throws KettlePluginException {
-    
+
   }
 
   @Override
   protected void registerXmlPlugins() throws KettlePluginException {
-    
+
   }
 
 }

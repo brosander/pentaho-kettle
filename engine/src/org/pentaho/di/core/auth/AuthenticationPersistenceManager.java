@@ -25,8 +25,9 @@ public class AuthenticationPersistenceManager {
     for ( PluginInterface plugin : PluginRegistry.getInstance().getPlugins( AuthenticationConsumerPluginType.class ) ) {
       try {
         Object pluginMain = PluginRegistry.getInstance().loadClass( plugin );
-        if (pluginMain instanceof AuthenticationConsumerType) {
-          Class<? extends AuthenticationConsumer<?, ?>> consumerClass = ((AuthenticationConsumerType) pluginMain).getConsumerClass();
+        if ( pluginMain instanceof AuthenticationConsumerType ) {
+          Class<? extends AuthenticationConsumer<?, ?>> consumerClass =
+              ( (AuthenticationConsumerType) pluginMain ).getConsumerClass();
           manager.registerConsumerClass( consumerClass );
         } else {
           throw new KettlePluginException();

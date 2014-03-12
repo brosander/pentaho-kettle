@@ -10,8 +10,8 @@ public class KerberosAuthenticationProvider implements AuthenticationProvider {
   private String keytabLocation;
   private String id;
 
-  public KerberosAuthenticationProvider( ) {
-    
+  public KerberosAuthenticationProvider() {
+
   }
 
   public KerberosAuthenticationProvider( String id, String principal, boolean useExternalCredentials, String password,

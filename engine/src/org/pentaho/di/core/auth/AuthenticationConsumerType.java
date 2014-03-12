@@ -29,6 +29,6 @@ import org.pentaho.di.core.auth.core.AuthenticationConsumer;
  */
 public interface AuthenticationConsumerType {
   public String getDisplayName();
-  
+
   public Class<? extends AuthenticationConsumer<?, ?>> getConsumerClass();
 }
