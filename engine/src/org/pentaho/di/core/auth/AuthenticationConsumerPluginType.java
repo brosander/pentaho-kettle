@@ -22,21 +22,14 @@
 
 package org.pentaho.di.core.auth;
 
-import java.io.InputStream;
 import java.lang.annotation.Annotation;
-import java.util.List;
 import java.util.Map;
 
-import org.pentaho.di.core.Const;
 import org.pentaho.di.core.exception.KettlePluginException;
-import org.pentaho.di.core.exception.KettleXMLException;
 import org.pentaho.di.core.plugins.BasePluginType;
 import org.pentaho.di.core.plugins.PluginAnnotationType;
 import org.pentaho.di.core.plugins.PluginMainClassType;
 import org.pentaho.di.core.plugins.PluginTypeInterface;
-import org.pentaho.di.core.xml.XMLHandler;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 /**
  * This class represents the authentication plugin type.
@@ -54,42 +47,6 @@ public class AuthenticationConsumerPluginType extends BasePluginType implements 
 
   public static AuthenticationConsumerPluginType getInstance() {
     return pluginType;
-  }
-
-  /**
-   * Scan & register internal step plugins
-   */
-  @Override
-  protected void registerNatives() throws KettlePluginException {
-    // Scan the native database types...
-    //
-    String xmlFile = Const.XML_FILE_KETTLE_AUTHENTICATION_PROVIDERS;
-
-    // Load the plugins for this file...
-    //
-    try {
-      InputStream inputStream = getClass().getResourceAsStream( xmlFile );
-      if ( inputStream == null ) {
-        inputStream = getClass().getResourceAsStream( "/" + xmlFile );
-      }
-      if ( inputStream == null ) {
-        throw new KettlePluginException( "Unable to find native kettle authentication providers definition file: "
-            + xmlFile );
-      }
-      Document document = XMLHandler.loadXMLFile( inputStream, null, true, false );
-
-      Node repsNode = XMLHandler.getSubNode( document, "authentication-providers" );
-      List<Node> repsNodes = XMLHandler.getNodes( repsNode, "authentication-provider" );
-      for ( Node repNode : repsNodes ) {
-        registerPluginFromXmlResource( repNode, "./", this.getClass(), true, null );
-      }
-    } catch ( KettleXMLException e ) {
-      throw new KettlePluginException( "Unable to read the kettle authentication providers config file: " + xmlFile, e );
-    }
-  }
-
-  @Override
-  protected void registerXmlPlugins() throws KettlePluginException {
   }
 
   public String[] getNaturalCategoriesOrder() {
@@ -148,6 +105,16 @@ public class AuthenticationConsumerPluginType extends BasePluginType implements 
   @Override
   protected String extractImageFile( Annotation annotation ) {
     return null;
+  }
+
+  @Override
+  protected void registerNatives() throws KettlePluginException {
+    
+  }
+
+  @Override
+  protected void registerXmlPlugins() throws KettlePluginException {
+    
   }
 
 }

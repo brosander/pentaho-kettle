@@ -41,7 +41,7 @@ public @interface AuthenticationConsumerPlugin {
 
   String name();
 
-  String description() default "Authentication Plugin";
+  String description() default "Authentication Consumer Plugin";
 
   /**
    * @return True if a separate class loader is needed every time this class is instantiated

@@ -3,6 +3,7 @@ package org.pentaho.di.core.auth;
 import org.pentaho.di.core.auth.core.AuthenticationProvider;
 
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
+  private String id;
   private String username;
   private String password;
 
@@ -29,15 +30,10 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 
   @Override
   public String getId() {
-    return username + hashCode();
+    return id;
   }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ( ( password == null ) ? 0 : password.hashCode() );
-    result = prime * result + ( ( username == null ) ? 0 : username.hashCode() );
-    return result;
+  
+  public void setId( String id ) {
+    this.id = id;
   }
 }

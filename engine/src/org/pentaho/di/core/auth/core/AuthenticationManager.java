@@ -45,7 +45,7 @@ public class AuthenticationManager {
   }
 
   public <ReturnType, ConsumedType> void registerConsumerClass(
-      Class<? extends AuthenticationConsumer<ReturnType, ConsumedType>> consumerClass ) {
+      Class<? extends AuthenticationConsumer<? extends ReturnType, ? extends ConsumedType>> consumerClass ) {
     registerConsumerFactory( new DefaultAuthenticationConsumerFactory( consumerClass ) );
   }
 

@@ -1,4 +1,4 @@
-package org.pentaho.di.core.auth;
+package org.pentaho.di.core.auth.kerberos;
 
 import java.io.IOException;
 import java.util.Collections;
