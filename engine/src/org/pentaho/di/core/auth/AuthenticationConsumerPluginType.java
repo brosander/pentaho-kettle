@@ -23,12 +23,15 @@
 package org.pentaho.di.core.auth;
 
 import java.lang.annotation.Annotation;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.pentaho.di.core.exception.KettlePluginException;
 import org.pentaho.di.core.plugins.BasePluginType;
 import org.pentaho.di.core.plugins.PluginAnnotationType;
 import org.pentaho.di.core.plugins.PluginMainClassType;
+import org.pentaho.di.core.plugins.PluginRegistry;
 import org.pentaho.di.core.plugins.PluginTypeInterface;
 
 /**
@@ -43,6 +46,16 @@ public class AuthenticationConsumerPluginType extends BasePluginType implements 
   private AuthenticationConsumerPluginType() {
     super( AuthenticationProviderPlugin.class, "AUTHENTICATION", "Authentication" );
     populateFolders( "authentication" );
+  }
+
+  public void registerPlugin( URLClassLoader classLoader, Class<? extends AuthenticationConsumerType> clazz )
+    throws KettlePluginException {
+    AuthenticationConsumerPlugin pluginAnnotation =
+        (AuthenticationConsumerPlugin) clazz.getAnnotation( AuthenticationConsumerPlugin.class );
+    AuthenticationConsumerPluginType.getInstance().handlePluginAnnotation( clazz, pluginAnnotation,
+        new ArrayList<String>(), false, null );
+    PluginRegistry.getInstance().addClassLoader( classLoader,
+        PluginRegistry.getInstance().getPlugin( AuthenticationConsumerPluginType.class, pluginAnnotation.id() ) );
   }
 
   public static AuthenticationConsumerPluginType getInstance() {
