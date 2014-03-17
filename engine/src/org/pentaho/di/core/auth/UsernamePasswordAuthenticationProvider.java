@@ -3,9 +3,31 @@ package org.pentaho.di.core.auth;
 import org.pentaho.di.core.auth.core.AuthenticationProvider;
 
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
+  public static class UsernamePasswordAuthenticationProviderType implements AuthenticationProviderType {
+
+    @Override
+    public String getDisplayName() {
+      return UsernamePasswordAuthenticationProvider.class.getName();
+    }
+
+    @Override
+    public Class<? extends AuthenticationProvider> getProviderClass() {
+      return UsernamePasswordAuthenticationProvider.class;
+    }
+  }
   private String id;
   private String username;
   private String password;
+
+  public UsernamePasswordAuthenticationProvider() {
+
+  }
+
+  public UsernamePasswordAuthenticationProvider( String id, String username, String password ) {
+    this.id = id;
+    this.username = username;
+    this.password = password;
+  }
 
   public String getUsername() {
     return username;

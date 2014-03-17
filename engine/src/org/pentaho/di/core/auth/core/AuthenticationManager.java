@@ -8,23 +8,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.pentaho.di.core.auth.core.impl.ClassloaderBridgingAuthenticationPerformer;
 import org.pentaho.di.core.auth.core.impl.DefaultAuthenticationConsumerFactory;
-import org.pentaho.di.core.auth.core.impl.DefaultAuthenticationPerformer;
+import org.pentaho.di.core.auth.core.impl.DefaultAuthenticationPerformerFactory;
 
 public class AuthenticationManager {
   private final Map<Class<?>, Map<Class<?>, Map<Class<?>, AuthenticationConsumerFactory<?, ?, ?>>>> factoryMap =
       new HashMap<Class<?>, Map<Class<?>, Map<Class<?>, AuthenticationConsumerFactory<?, ?, ?>>>>();
+  private AuthenticationPerformerFactory authenticationPerformerFactory = new DefaultAuthenticationPerformerFactory();
   private final List<AuthenticationProvider> authenticationProviders = new ArrayList<AuthenticationProvider>();
 
   public void registerAuthenticationProvider( AuthenticationProvider authenticationProvider ) {
-    synchronized ( authenticationProvider ) {
+    synchronized ( authenticationProviders ) {
       authenticationProviders.add( authenticationProvider );
     }
   }
 
   public boolean unregisterAuthenticationProvider( AuthenticationProvider authenticationProvider ) {
-    synchronized ( authenticationProvider ) {
+    synchronized ( authenticationProviders ) {
       return authenticationProviders.remove( authenticationProvider );
     }
   }
@@ -67,22 +67,10 @@ public class AuthenticationManager {
 
     for ( Entry<Class<?>, AuthenticationConsumerFactory<?, ?, ?>> entry : createTypeMap.entrySet() ) {
       for ( AuthenticationProvider provider : authenticationProviders ) {
-        AuthenticationPerformer<ReturnType, CreateArgType> authenticationPerformer = null;
-        if ( entry.getKey().isInstance( provider ) ) {
-          @SuppressWarnings( "unchecked" )
-          AuthenticationConsumerFactory<ReturnType, CreateArgType, AuthenticationProvider> factory =
-              (AuthenticationConsumerFactory<ReturnType, CreateArgType, AuthenticationProvider>) entry.getValue();
-          authenticationPerformer =
-              new DefaultAuthenticationPerformer<ReturnType, CreateArgType, AuthenticationProvider>(
-                  provider, factory );
-        } else if ( entry.getKey().getClassLoader() != provider.getClass().getClassLoader()
-            && AuthenticationConsumerInvocationHandler.isCompatible( entry.getKey(), provider ) ) {
-          @SuppressWarnings( "unchecked" )
-          AuthenticationConsumerFactory<ReturnType, CreateArgType, ConsumedType> factory =
-              (AuthenticationConsumerFactory<ReturnType, CreateArgType, ConsumedType>) entry.getValue();
-          result.add( new ClassloaderBridgingAuthenticationPerformer<ReturnType, CreateArgType, ConsumedType>(
-              provider, factory ) );
-        }
+        @SuppressWarnings( "unchecked" )
+        AuthenticationPerformer<ReturnType, CreateArgType> authenticationPerformer =
+            (AuthenticationPerformer<ReturnType, CreateArgType>) authenticationPerformerFactory.create( provider, entry
+                .getValue() );
         if ( authenticationPerformer != null && authenticationPerformer.getDisplayName() != null ) {
           result.add( authenticationPerformer );
         }
@@ -130,5 +118,9 @@ public class AuthenticationManager {
 
       return createTypeMap;
     }
+  }
+
+  protected void setAuthenticationPerformerFactory( AuthenticationPerformerFactory authenticationPerformerFactory ) {
+    this.authenticationPerformerFactory = authenticationPerformerFactory;
   }
 }

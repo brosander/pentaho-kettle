@@ -13,6 +13,7 @@ public class AuthenticationPersistenceManager {
     // IMetaStore ims = Spoon.getInstance().getMetaStore();
     // KerberosAuthenticationProvider kerberosAuthenticationProvider = new KerberosAuthenticationProvider( ",
     // useExternalCredentials, password, useKeytab, keytabLocation )
+
     manager.registerAuthenticationProvider( new NoAuthenticationAuthenticationProvider() );
     UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider =
         new UsernamePasswordAuthenticationProvider();
@@ -20,8 +21,10 @@ public class AuthenticationPersistenceManager {
     usernamePasswordAuthenticationProvider.setPassword( "password" );
     manager.registerAuthenticationProvider( usernamePasswordAuthenticationProvider );
     KerberosAuthenticationProvider kerberosAuthenticationProvider =
-        new KerberosAuthenticationProvider( "test", "bryan@DEV.PENTAHO", false, "password", false, null );
+        new KerberosAuthenticationProvider( "test", "bryan@DEV.PENTAHO", true, "password", true,
+            "/home/devuser/bryan.keytab" );
     manager.registerAuthenticationProvider( kerberosAuthenticationProvider );
+
     for ( PluginInterface plugin : PluginRegistry.getInstance().getPlugins( AuthenticationConsumerPluginType.class ) ) {
       try {
         Object pluginMain = PluginRegistry.getInstance().loadClass( plugin );

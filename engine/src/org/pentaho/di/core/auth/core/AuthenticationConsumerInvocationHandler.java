@@ -23,6 +23,16 @@ public class AuthenticationConsumerInvocationHandler implements InvocationHandle
         return false;
       }
     }
+    for ( Method method : targetObject.getClass().getMethods() ) {
+      // We don't care about proxying Object methods
+      if ( method.getDeclaringClass() != Object.class ) {
+        try {
+          proxyInterface.getMethod( method.getName(), method.getParameterTypes() );
+        } catch ( Exception e ) {
+          return false;
+        }
+      }
+    }
     return true;
   }
 }

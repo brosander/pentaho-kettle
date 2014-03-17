@@ -3,6 +3,18 @@ package org.pentaho.di.core.auth;
 import org.pentaho.di.core.auth.core.AuthenticationProvider;
 
 public class KerberosAuthenticationProvider implements AuthenticationProvider {
+  public static class KerberosAuthenticationProviderType implements AuthenticationProviderType {
+
+    @Override
+    public String getDisplayName() {
+      return KerberosAuthenticationProvider.class.getName();
+    }
+
+    @Override
+    public Class<? extends AuthenticationProvider> getProviderClass() {
+      return KerberosAuthenticationProvider.class;
+    }
+  }
   private String principal;
   private boolean useExternalCredentials;
   private String password;

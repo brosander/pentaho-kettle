@@ -48,7 +48,7 @@ public class AuthenticationProviderPluginType extends BasePluginType implements 
   protected static AuthenticationProviderPluginType pluginType = new AuthenticationProviderPluginType();;
 
   private AuthenticationProviderPluginType() {
-    super( AuthenticationProviderPlugin.class, "AUTHENTICATION", "Authentication" );
+    super( AuthenticationProviderPlugin.class, "AUTHENTICATION_PROVIDER", "AuthenticationProvider" );
     populateFolders( "authentication" );
   }
 
@@ -148,7 +148,7 @@ public class AuthenticationProviderPluginType extends BasePluginType implements 
 
   @Override
   protected String extractImageFile( Annotation annotation ) {
-    return null;
+    return "";
   }
 
 }

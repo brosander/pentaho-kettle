@@ -44,7 +44,7 @@ public class AuthenticationConsumerPluginType extends BasePluginType implements 
   protected static AuthenticationConsumerPluginType pluginType = new AuthenticationConsumerPluginType();;
 
   private AuthenticationConsumerPluginType() {
-    super( AuthenticationProviderPlugin.class, "AUTHENTICATION", "Authentication" );
+    super( AuthenticationProviderPlugin.class, "AUTHENTICATION_CONSUMER", "AuthenticationConsumer" );
     populateFolders( "authentication" );
   }
 
@@ -117,7 +117,7 @@ public class AuthenticationConsumerPluginType extends BasePluginType implements 
 
   @Override
   protected String extractImageFile( Annotation annotation ) {
-    return null;
+    return "";
   }
 
   @Override
