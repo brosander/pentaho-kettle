@@ -102,6 +102,7 @@ import org.pentaho.di.repository.RepositoryDirectory;
 import org.pentaho.di.repository.RepositoryElementInterface;
 import org.pentaho.di.repository.RepositoryObjectType;
 import org.pentaho.di.resource.ResourceDefinition;
+import org.pentaho.di.resource.ResourceExportInterface;
 import org.pentaho.di.resource.ResourceNamingInterface;
 import org.pentaho.di.resource.ResourceReference;
 import org.pentaho.di.shared.SharedObjectInterface;
@@ -132,7 +133,7 @@ import org.w3c.dom.Node;
  * @author Matt Casters
  */
 public class TransMeta extends AbstractMeta implements XMLInterface, Comparator<TransMeta>, Comparable<TransMeta>,
-    Cloneable, RepositoryElementInterface, LoggingObjectInterface {
+    Cloneable, ResourceExportInterface, RepositoryElementInterface, LoggingObjectInterface {
 
   /** The package name, used for internationalization of messages. */
   private static Class<?> PKG = Trans.class; // for i18n purposes, needed by Translator2!!
@@ -665,7 +666,6 @@ public class TransMeta extends AbstractMeta implements XMLInterface, Comparator<
    */
   @Override
   public void clear() {
-    super.clear();
     setObjectId( null );
     steps = new ArrayList<StepMeta>();
     hops = new ArrayList<TransHopMeta>();
@@ -701,8 +701,7 @@ public class TransMeta extends AbstractMeta implements XMLInterface, Comparator<
     counters = new Hashtable<String, Counter>();
     resultRows = null;
 
-    clearUndo();
-    clearChanged();
+    super.clear();
 
     // LOAD THE DATABASE CACHE!
     dbCache = DBCache.getInstance();

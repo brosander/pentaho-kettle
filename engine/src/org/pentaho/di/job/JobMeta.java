@@ -175,8 +175,6 @@ public class JobMeta extends AbstractMeta implements Cloneable, Comparable<JobMe
    */
   @Override
   public void clear() {
-    super.clear();
-
     jobcopies = new ArrayList<JobEntryCopy>();
     jobhops = new ArrayList<JobHopMeta>();
 
@@ -200,6 +198,7 @@ public class JobMeta extends AbstractMeta implements Cloneable, Comparable<JobMe
 
     arguments = null;
 
+    super.clear();
     addDefaults();
     jobStatus = -1;
     jobVersion = null;
