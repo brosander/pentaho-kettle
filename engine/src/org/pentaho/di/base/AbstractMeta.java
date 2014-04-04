@@ -57,6 +57,7 @@ import org.pentaho.di.core.variables.VariableSpace;
 import org.pentaho.di.core.variables.Variables;
 import org.pentaho.di.repository.HasRepositoryInterface;
 import org.pentaho.di.repository.ObjectId;
+import org.pentaho.di.repository.ObjectRevision;
 import org.pentaho.di.repository.Repository;
 import org.pentaho.di.repository.RepositoryDirectory;
 import org.pentaho.di.repository.RepositoryDirectoryInterface;
@@ -82,6 +83,8 @@ public abstract class AbstractMeta extends ChangedFlag implements UndoInterface,
   public static final int TYPE_UNDO_POSITION = 4;
 
   protected ObjectId objectId;
+
+  protected ObjectRevision objectRevision;
 
   protected String containerObjectId;
 
@@ -1615,6 +1618,68 @@ public abstract class AbstractMeta extends ChangedFlag implements UndoInterface,
       return true;
     }
     return false;
+  }
+
+  /**
+   * Gets the registration date for the transformation. For AbstractMeta, this method always returns null.
+   * 
+   * @return null
+   */
+  @Override
+  public Date getRegistrationDate() {
+    return null;
+  }
+
+  /**
+   * Gets the interface to the parent log object. For AbstractMeta, this method always returns null.
+   * 
+   * @return null
+   * @see org.pentaho.di.core.logging.LoggingObjectInterface#getParent()
+   */
+  @Override
+  public LoggingObjectInterface getParent() {
+    return null;
+  }
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see org.pentaho.di.core.logging.LoggingObjectInterface#getObjectName()
+   */
+  @Override
+  public String getObjectName() {
+    return getName();
+  }
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see org.pentaho.di.core.logging.LoggingObjectInterface#getObjectCopy()
+   */
+  @Override
+  public String getObjectCopy() {
+    return null;
+  }
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see org.pentaho.di.repository.RepositoryElementInterface#getObjectRevision()
+   */
+  @Override
+  public ObjectRevision getObjectRevision() {
+    return objectRevision;
+  }
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * org.pentaho.di.repository.RepositoryElementInterface#setObjectRevision(org.pentaho.di.repository.ObjectRevision)
+   */
+  @Override
+  public void setObjectRevision( ObjectRevision objectRevision ) {
+    this.objectRevision = objectRevision;
   }
 
   /**

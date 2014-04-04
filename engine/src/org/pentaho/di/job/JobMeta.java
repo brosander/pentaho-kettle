@@ -26,7 +26,6 @@ package org.pentaho.di.job;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +82,6 @@ import org.pentaho.di.job.entries.special.JobEntrySpecial;
 import org.pentaho.di.job.entry.JobEntryCopy;
 import org.pentaho.di.job.entry.JobEntryInterface;
 import org.pentaho.di.repository.ObjectId;
-import org.pentaho.di.repository.ObjectRevision;
 import org.pentaho.di.repository.Repository;
 import org.pentaho.di.repository.RepositoryDirectory;
 import org.pentaho.di.repository.RepositoryElementInterface;
@@ -162,8 +160,6 @@ public class JobMeta extends AbstractMeta implements Cloneable, Comparable<JobMe
   protected boolean batchIdPassed;
 
   protected static final String XML_TAG_PARAMETERS = "parameters";
-
-  protected ObjectRevision objectRevision;
 
   /**
    * Instantiates a new job meta.
@@ -2702,25 +2698,6 @@ public class JobMeta extends AbstractMeta implements Cloneable, Comparable<JobMe
     return REPOSITORY_ELEMENT_TYPE;
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.pentaho.di.repository.RepositoryElementInterface#getObjectRevision()
-   */
-  public ObjectRevision getObjectRevision() {
-    return objectRevision;
-  }
-
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * org.pentaho.di.repository.RepositoryElementInterface#setObjectRevision(org.pentaho.di.repository.ObjectRevision)
-   */
-  public void setObjectRevision( ObjectRevision objectRevision ) {
-    this.objectRevision = objectRevision;
-  }
-
   /**
    * Create a unique list of job entry interfaces
    *
@@ -2750,37 +2727,10 @@ public class JobMeta extends AbstractMeta implements Cloneable, Comparable<JobMe
   /*
    * (non-Javadoc)
    *
-   * @see org.pentaho.di.core.logging.LoggingObjectInterface#getObjectName()
-   */
-  public String getObjectName() {
-    return getName();
-  }
-
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.pentaho.di.core.logging.LoggingObjectInterface#getObjectCopy()
-   */
-  public String getObjectCopy() {
-    return null;
-  }
-
-  /*
-   * (non-Javadoc)
-   *
    * @see org.pentaho.di.core.logging.LoggingObjectInterface#getObjectType()
    */
   public LoggingObjectType getObjectType() {
     return LoggingObjectType.JOBMETA;
-  }
-
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.pentaho.di.core.logging.LoggingObjectInterface#getParent()
-   */
-  public LoggingObjectInterface getParent() {
-    return null; // TODO return parent job metadata
   }
 
   /**
@@ -2814,15 +2764,6 @@ public class JobMeta extends AbstractMeta implements Cloneable, Comparable<JobMe
     logTables.add( channelLogTable );
     logTables.addAll( extraLogTables );
     return logTables;
-  }
-
-  /**
-   * Gets the registration date for the transformation. For jobMeta, this method always returns null.
-   *
-   * @return null
-   */
-  public Date getRegistrationDate() {
-    return null;
   }
 
   /**

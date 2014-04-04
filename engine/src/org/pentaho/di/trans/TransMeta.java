@@ -29,7 +29,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -98,7 +97,6 @@ import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.metastore.DatabaseMetaStoreUtil;
 import org.pentaho.di.partition.PartitionSchema;
 import org.pentaho.di.repository.HasRepositoryInterface;
-import org.pentaho.di.repository.ObjectRevision;
 import org.pentaho.di.repository.Repository;
 import org.pentaho.di.repository.RepositoryDirectory;
 import org.pentaho.di.repository.RepositoryElementInterface;
@@ -3943,9 +3941,6 @@ public class TransMeta extends AbstractMeta implements XMLInterface, Comparator<
   /** The previous count. */
   private long prevCount;
 
-  /** The object version. */
-  private ObjectRevision objectVersion;
-
   /**
    * Puts the steps in a more natural order: from start to finish. For the moment, we ignore splits and joins. Splits
    * and joins can't be listed sequentially in any case!
@@ -5903,28 +5898,6 @@ public class TransMeta extends AbstractMeta implements XMLInterface, Comparator<
   }
 
   /**
-   * Sets the object revision.
-   *
-   * @param objectRevision
-   *          the new object revision
-   * @see org.pentaho.di.repository.RepositoryElementInterface#setObjectRevision(
-   *   org.pentaho.di.repository.ObjectRevision)
-   */
-  public void setObjectRevision( ObjectRevision objectRevision ) {
-    this.objectVersion = objectRevision;
-  }
-
-  /**
-   * Gets the object revision.
-   *
-   * @return the object revision
-   * @see org.pentaho.di.repository.RepositoryElementInterface#getObjectRevision()
-   */
-  public ObjectRevision getObjectRevision() {
-    return objectVersion;
-  }
-
-  /**
    * Gets the log channel.
    *
    * @return the log channel
@@ -5944,26 +5917,6 @@ public class TransMeta extends AbstractMeta implements XMLInterface, Comparator<
   }
 
   /**
-   * Gets the object name.
-   *
-   * @return the object name
-   * @see org.pentaho.di.core.logging.LoggingObjectInterface#getObjectName()
-   */
-  public String getObjectName() {
-    return getName();
-  }
-
-  /**
-   * Gets the object copy.
-   *
-   * @return the object copy
-   * @see org.pentaho.di.core.logging.LoggingObjectInterface#getObjectCopy()
-   */
-  public String getObjectCopy() {
-    return null;
-  }
-
-  /**
    * Gets the object type.
    *
    * @return the object type
@@ -5971,16 +5924,6 @@ public class TransMeta extends AbstractMeta implements XMLInterface, Comparator<
    */
   public LoggingObjectType getObjectType() {
     return LoggingObjectType.TRANSMETA;
-  }
-
-  /**
-   * Gets the interface to the parent log object. For TransMeta, this method always returns null.
-   *
-   * @return null
-   * @see org.pentaho.di.core.logging.LoggingObjectInterface#getParent()
-   */
-  public LoggingObjectInterface getParent() {
-    return null; // TODO, we could also keep a link to the parent and job metadata
   }
 
   /**
@@ -6099,15 +6042,6 @@ public class TransMeta extends AbstractMeta implements XMLInterface, Comparator<
         }
       }
     }
-  }
-
-  /**
-   * Gets the registration date for the transformation. For TransMeta, this method always returns null.
-   *
-   * @return null
-   */
-  public Date getRegistrationDate() {
-    return null;
   }
 
   /**
