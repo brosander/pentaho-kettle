@@ -38,6 +38,7 @@ import java.util.Map;
 import org.apache.commons.vfs.FileName;
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemException;
+import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.cluster.ClusterSchema;
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.AttributesInterface;
@@ -56,7 +57,6 @@ import org.pentaho.di.core.ResultFile;
 import org.pentaho.di.core.RowMetaAndData;
 import org.pentaho.di.core.SQLStatement;
 import org.pentaho.di.core.attributes.AttributesUtil;
-import org.pentaho.di.core.changed.ChangedFlag;
 import org.pentaho.di.core.database.Database;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.exception.KettleDatabaseException;
@@ -150,7 +150,7 @@ import org.w3c.dom.Node;
  * @since 20-jun-2003
  * @author Matt Casters
  */
-public class TransMeta extends ChangedFlag implements XMLInterface, Comparator<TransMeta>, Comparable<TransMeta>,
+public class TransMeta extends AbstractMeta implements XMLInterface, Comparator<TransMeta>, Comparable<TransMeta>,
   Cloneable, UndoInterface, HasDatabasesInterface, VariableSpace, EngineMetaInterface, ResourceExportInterface,
   HasSlaveServersInterface, NamedParams, RepositoryElementInterface, LoggingObjectInterface, AttributesInterface {
 
@@ -167,9 +167,6 @@ public class TransMeta extends ChangedFlag implements XMLInterface, Comparator<T
 
   /** A constant specifying the repository element type as a Transformation. */
   public static final RepositoryObjectType REPOSITORY_ELEMENT_TYPE = RepositoryObjectType.TRANSFORMATION;
-
-  /** The list of databases associated with the transformation. */
-  protected List<DatabaseMeta> databases;
 
   /** The list of steps associated with the transformation. */
 
@@ -1070,18 +1067,6 @@ public class TransMeta extends ChangedFlag implements XMLInterface, Comparator<T
   }
 
   /**
-   * Gets the database at the specified index.
-   *
-   * @param i
-   *          the index into the database list
-   * @return the database meta-data object at the specified index
-   * @see org.pentaho.di.trans.HasDatabaseInterface#getDatabase(int)
-   */
-  public DatabaseMeta getDatabase( int i ) {
-    return databases.get( i );
-  }
-
-  /**
    * Get a list of defined steps in this transformation.
    *
    * @return an ArrayList of defined steps.
@@ -1249,16 +1234,6 @@ public class TransMeta extends ChangedFlag implements XMLInterface, Comparator<T
   }
 
   /**
-   * Gets the number of databases associated with the transformation.
-   *
-   * @return the number of databases associated with the transformation
-   * @see org.pentaho.di.trans.HasDatabaseInterface#nrDatabases()
-   */
-  public int nrDatabases() {
-    return databases.size();
-  }
-
-  /**
    * Gets the number of steps in the transformation.
    *
    * @return The number of steps in the transformation.
@@ -1337,25 +1312,6 @@ public class TransMeta extends ChangedFlag implements XMLInterface, Comparator<T
     }
 
     return list;
-  }
-
-  /**
-   * Find a database (associated with the transformation) by name
-   *
-   * @param name
-   *          the name of the desired database
-   * @return the desired database's meta-data, or null if no database is found
-   */
-  public DatabaseMeta findDatabase( String name ) {
-    int i;
-    for ( i = 0; i < nrDatabases(); i++ ) {
-      DatabaseMeta ci = getDatabase( i );
-      if (( ci != null ) && ( ci.getName().equalsIgnoreCase( name ) ) ||
-              ( ci.getDisplayName().equalsIgnoreCase( name ) )) {
-        return ci;
-      }
-    }
-    return null;
   }
 
   /**

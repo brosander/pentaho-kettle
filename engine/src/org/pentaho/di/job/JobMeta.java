@@ -37,6 +37,7 @@ import java.util.Set;
 import org.apache.commons.vfs.FileName;
 import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemException;
+import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.AttributesInterface;
 import org.pentaho.di.core.CheckResultInterface;
@@ -48,7 +49,6 @@ import org.pentaho.di.core.ProgressMonitorListener;
 import org.pentaho.di.core.Props;
 import org.pentaho.di.core.SQLStatement;
 import org.pentaho.di.core.attributes.AttributesUtil;
-import org.pentaho.di.core.changed.ChangedFlag;
 import org.pentaho.di.core.database.Database;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.exception.KettleDatabaseException;
@@ -129,7 +129,7 @@ import org.w3c.dom.Node;
  * @since 11-08-2003
  *
  */
-public class JobMeta extends ChangedFlag implements Cloneable, Comparable<JobMeta>, XMLInterface, UndoInterface,
+public class JobMeta extends AbstractMeta implements Cloneable, Comparable<JobMeta>, XMLInterface, UndoInterface,
   HasDatabasesInterface, VariableSpace, EngineMetaInterface, ResourceExportInterface, HasSlaveServersInterface,
   NamedParams, RepositoryElementInterface, LoggingObjectInterface, HasRepositoryInterface, AttributesInterface {
 
@@ -165,8 +165,6 @@ public class JobMeta extends ChangedFlag implements Cloneable, Comparable<JobMet
   protected List<JobHopMeta> jobhops;
 
   protected List<NotePadMeta> notes;
-
-  protected List<DatabaseMeta> databases;
 
   protected List<SlaveServer> slaveServers;
 
@@ -1514,24 +1512,6 @@ public class JobMeta extends ChangedFlag implements Cloneable, Comparable<JobMet
   }
 
   /**
-   * Find a database connection by it's name
-   *
-   * @param name
-   *          The database name to look for
-   * @return The database connection or null if nothing was found.
-   */
-  public DatabaseMeta findDatabase( String name ) {
-    for ( int i = 0; i < nrDatabases(); i++ ) {
-      DatabaseMeta ci = getDatabase( i );
-      if (( ci != null ) && ( ci.getName().equalsIgnoreCase( name ) ) ||
-              ( ci.getDisplayName().equalsIgnoreCase( name ) )) {
-        return ci;
-      }
-    }
-    return null;
-  }
-
-  /**
    * Gets the job entry copy.
    *
    * @param x
@@ -1586,15 +1566,6 @@ public class JobMeta extends ChangedFlag implements Cloneable, Comparable<JobMet
     return notes.size();
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.pentaho.di.trans.HasDatabasesInterface#nrDatabases()
-   */
-  public int nrDatabases() {
-    return databases.size();
-  }
-
   /**
    * Gets the job hop.
    *
@@ -1626,15 +1597,6 @@ public class JobMeta extends ChangedFlag implements Cloneable, Comparable<JobMet
    */
   public NotePadMeta getNote( int i ) {
     return notes.get( i );
-  }
-
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.pentaho.di.trans.HasDatabasesInterface#getDatabase(int)
-   */
-  public DatabaseMeta getDatabase( int i ) {
-    return databases.get( i );
   }
 
   /**
