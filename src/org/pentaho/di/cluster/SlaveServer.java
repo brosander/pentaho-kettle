@@ -669,8 +669,10 @@ public class SlaveServer extends ChangedFlag implements Cloneable, SharedObjectI
         if ( tries >= maxRetries ) {
           throw e;
         } else {
+          long delay = getDelay( tries );
+          log.logError("Error connecting to service, retry number " + (tries + 1) + " after delay of " + delay, e);
           try {
-            Thread.sleep( getDelay( tries ) );
+            Thread.sleep( delay );
           } catch ( InterruptedException e2 ) {
             //ignore
           }
