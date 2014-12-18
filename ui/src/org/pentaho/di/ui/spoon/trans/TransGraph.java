@@ -342,6 +342,8 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
 
   public TransPreviewDelegate transPreviewDelegate;
 
+  public List<SelectedStepListener> stepListeners;
+
   /** A map that keeps track of which log line was written by which step */
   private Map<StepMeta, String> stepLogMap;
 
@@ -385,6 +387,10 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     this.currentStep = currentStep;
   }
 
+  public void addSelectedStepListener( SelectedStepListener selectedStepListener ) {
+    stepListeners.add( selectedStepListener );
+  }
+
   public TransGraph( Composite parent, final Spoon spoon, final TransMeta transMeta ) {
     super( parent, SWT.NONE );
     this.shell = parent.getShell();
@@ -402,6 +408,8 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     transPerfDelegate = new TransPerfDelegate( spoon, this );
     transMetricsDelegate = new TransMetricsDelegate( spoon, this );
     transPreviewDelegate = new TransPreviewDelegate( spoon, this );
+
+    stepListeners = new ArrayList<SelectedStepListener>(  );
 
     try {
       XulLoader loader = new KettleXulLoader();
@@ -879,6 +887,11 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
             } else {
               if ( transPreviewDelegate.isActive() ) {
                 transPreviewDelegate.setSelectedStep( currentStep );
+
+                for ( SelectedStepListener stepListener : stepListeners ) {
+                  stepListener.onSelect( currentStep );
+                }
+
                 transPreviewDelegate.refreshView();
               }
             }
@@ -3707,7 +3720,7 @@ public class TransGraph extends AbstractGraph implements XulEventHandler, Redraw
     List<SpoonUiExtenderPluginInterface> relevantExtenders =
       SpoonUiExtenderPluginType.getInstance().getRelevantExtenders( TransGraph.class, "loadTab" );
 
-    for (SpoonUiExtenderPluginInterface relevantExtender : relevantExtenders){
+    for ( SpoonUiExtenderPluginInterface relevantExtender : relevantExtenders ) {
       relevantExtender.uiEvent( this, "loadTab" );
     }
 
