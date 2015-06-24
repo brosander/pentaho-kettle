@@ -47,8 +47,10 @@ import org.pentaho.di.core.util.UUIDUtil;
 import org.pentaho.di.core.variables.VariableSpace;
 import org.pentaho.di.core.variables.Variables;
 import org.pentaho.di.core.vfs.configuration.IKettleFileSystemConfigBuilder;
+import org.pentaho.di.core.vfs.configuration.IMetaStoreAwareConfigBuilder;
 import org.pentaho.di.core.vfs.configuration.KettleFileSystemConfigBuilderFactory;
 import org.pentaho.di.i18n.BaseMessages;
+import org.pentaho.metastore.api.IMetaStore;
 
 public class KettleVFS {
   private static Class<?> PKG = KettleVFS.class; // for i18n purposes, needed by Translator2!!
@@ -95,18 +97,30 @@ public class KettleVFS {
   }
 
   public static FileObject getFileObject( String vfsFilename ) throws KettleFileException {
-    return getFileObject( vfsFilename, defaultVariableSpace );
+    return getFileObject( vfsFilename, ( IMetaStore ) null );
+  }
+
+  public static FileObject getFileObject( String vfsFilename, IMetaStore metaStore ) throws KettleFileException {
+    return getFileObject( vfsFilename, defaultVariableSpace, metaStore );
   }
 
   public static FileObject getFileObject( String vfsFilename, VariableSpace space ) throws KettleFileException {
-    return getFileObject( vfsFilename, space, null );
+    return getFileObject( vfsFilename, space, ( IMetaStore ) null );
+  }
+
+  public static FileObject getFileObject( String vfsFilename, VariableSpace space, IMetaStore metaStore ) throws KettleFileException {
+    return getFileObject( vfsFilename, space, null, metaStore );
   }
 
   public static FileObject getFileObject( String vfsFilename, FileSystemOptions fsOptions ) throws KettleFileException {
-    return getFileObject( vfsFilename, defaultVariableSpace, fsOptions );
+    return getFileObject( vfsFilename, defaultVariableSpace, fsOptions, null );
   }
 
   public static FileObject getFileObject( String vfsFilename, VariableSpace space, FileSystemOptions fsOptions ) throws KettleFileException {
+    return getFileObject( vfsFilename, space, fsOptions, null );
+  }
+
+  public static FileObject getFileObject( String vfsFilename, VariableSpace space, FileSystemOptions fsOptions, IMetaStore metaStore ) throws KettleFileException {
     try {
       FileSystemManager fsManager = getInstance().getFileSystemManager();
 
@@ -139,6 +153,13 @@ public class KettleVFS {
         } else {
           filename = vfsFilename;
         }
+      }
+
+      if ( metaStore != null ) {
+        if ( fsOptions == null ) {
+          fsOptions = new FileSystemOptions();
+        }
+        IMetaStoreAwareConfigBuilder.getInstance().setMetaStore( fsOptions, metaStore );
       }
 
       FileObject fileObject = null;
