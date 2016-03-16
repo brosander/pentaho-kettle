@@ -23,6 +23,7 @@
 package org.pentaho.di.repository;
 
 import org.pentaho.di.core.exception.KettleException;
+import java.util.List;
 
 /**
  * This interface allows you to pass a simple interface to an object to allow it to store or load itself from or to any
