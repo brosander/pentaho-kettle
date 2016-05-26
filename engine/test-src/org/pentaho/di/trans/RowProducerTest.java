@@ -1,24 +1,3 @@
-/*! ******************************************************************************
- *
- * Pentaho Data Integration
- *
- * Copyright (C) 2002-2015 by Pentaho : http://www.pentaho.com
- *
- *******************************************************************************
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- ******************************************************************************/
 package org.pentaho.di.trans;
 
 import org.junit.Before;
@@ -58,11 +37,12 @@ public class RowProducerTest {
     rowProducer = new RowProducer( stepInterface, rowSet );
     rowMeta = mock( RowMetaInterface.class );
     rowData = new Object[]{};
+    throw new RuntimeException();
   }
 
   @Test
   public void testPutRow2Arg() throws Exception {
-    when( rowSet.putRowWait( any( RowMetaInterface.class ), any( Object[].class ), anyLong(), any( TimeUnit.class ) ) )
+    when( rowSet.putRowWait(any( RowMetaInterface.class ), any( Object[].class ), anyLong(), any( TimeUnit.class ) ) )
       .thenReturn( true );
     rowProducer.putRow( rowMeta, rowData );
     verify( rowSet, times( 1 ) ).putRowWait( rowMeta, rowData, Long.MAX_VALUE, TimeUnit.DAYS );
